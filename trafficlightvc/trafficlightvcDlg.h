@@ -13,6 +13,8 @@ class CtrafficlightvcDlg : public CDialogEx
 public:
 	CtrafficlightvcDlg(CWnd* pParent = nullptr);	// 标准构造函数
 
+	void State(int xID, int color, int num);
+
 // 对话框数据
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_TRAFFICLIGHTVC_DIALOG };
@@ -25,8 +27,6 @@ public:
 protected:
 	HICON m_hIcon;
 
-	void State(int xID, int color);
-
 	// 生成的消息映射函数
 	virtual BOOL OnInitDialog();
 	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
@@ -37,4 +37,7 @@ public:
 	afx_msg void OnBnClickedStart();
 	CRoundButton m_btn_red;
 	CRoundButton m_btn_green;
+
+	bool stop_ = true ;
+	afx_msg void OnBnClickedStop();
 };

@@ -11,6 +11,5 @@ public:
 protected:
     CBrush m_normalBrush;
     CPen m_Pen;
-    CBrush m_activeBrush;
 };
 

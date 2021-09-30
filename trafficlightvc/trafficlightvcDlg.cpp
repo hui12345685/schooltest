@@ -67,6 +67,7 @@ BEGIN_MESSAGE_MAP(CtrafficlightvcDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_START, &CtrafficlightvcDlg::OnBnClickedStart)
+	ON_BN_CLICKED(IDC_STOP, &CtrafficlightvcDlg::OnBnClickedStop)
 END_MESSAGE_MAP()
 
 
@@ -155,7 +156,7 @@ HCURSOR CtrafficlightvcDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
-void CtrafficlightvcDlg::State(int xID, int color) {
+void CtrafficlightvcDlg::State(int xID, int color, int num) {
     CRect conRect;
     CWnd* pWnd = GetDlgItem(xID);//在图象控件中设圆形状态指示灯
     CDC* pDC = pWnd->GetDC();
@@ -163,14 +164,51 @@ void CtrafficlightvcDlg::State(int xID, int color) {
     CBrush NewBrush((COLORREF)color);//指示灯为color色
     CBrush* pOldBrush = pDC->SelectObject(&NewBrush);
     pDC->SetViewportOrg(conRect.right / 2, conRect.bottom / 2);
-    pDC->Ellipse(-22, -22, 22, 22);
+    CRect rct;
+    rct.left = -22;
+    rct.top = -22;
+    rct.right = 22;
+    rct.bottom = 22;
+    pDC->Ellipse(rct);
     pDC->SelectObject(pOldBrush);
+
+    CString strText;
+	if (0 != num){
+		strText.Format("%d", num);
+	}
+	pDC->DrawText(strText, rct, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
     pWnd->ReleaseDC(pDC);
+}
+
+static void ThreadProc(void* argc) {
+	CtrafficlightvcDlg* pDlg = (CtrafficlightvcDlg*)argc;
+    while (!pDlg->stop_) {
+        for (int idx = 30; idx >= 0; idx--) {
+			pDlg->State(IDC_RED, 0x000FF0, idx);//red
+            Sleep(1000);
+        }
+
+        for (int idx = 30; idx >= 0; idx--) {
+			pDlg->State(IDC_GREEN, 0x00FF00, idx);//green
+            Sleep(1000);
+        }
+    }
 }
 
 void CtrafficlightvcDlg::OnBnClickedStart()
 {
 	// TODO: 在此添加控件通知处理程序代码
-	//State(IDC_G1, 0x000FF0);//red
-	//State(IDC_G2, 0x00FF00);//green
+	if (!stop_){
+		//提示线程还未退出
+		return;
+	}
+	stop_ = false;
+	_beginthread(ThreadProc, 0, this);
+}
+
+
+void CtrafficlightvcDlg::OnBnClickedStop()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	stop_ = true;
 }
