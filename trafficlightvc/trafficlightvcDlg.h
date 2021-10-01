@@ -17,20 +17,24 @@ public:
 
 	void SetColorDefault(int xID);
 
-	void SetRedTimes(int redTimes) {
+	inline void SetRedTimes(int redTimes) {
 		m_redTimes = redTimes;
 	}
 
-    void SetGreenTimes(int greenTimes) {
+	inline void SetGreenTimes(int greenTimes) {
 		m_greenTimes = greenTimes;
     }
 
-    int GetRedTimes() {
+	inline int GetRedTimes() {
         return m_redTimes;
     }
 
-    int GetGreenTimes() {
+	inline int GetGreenTimes() {
 		return m_greenTimes;
+    }
+
+	inline void SetAskResult(const CString& askResult) {
+		m_askResult = askResult;
     }
 
 // 对话框数据
@@ -61,7 +65,11 @@ public:
 	afx_msg void OnBnClickedSet();
 
 protected:
-	//默认值30
-	int m_redTimes = 30;
-	int m_greenTimes = 30;
+	//默认值15秒
+	int m_redTimes = 15;
+	int m_greenTimes = 15;
+
+	CString m_askResult;
+public:
+	afx_msg void OnBnClickedQuestask();
 };

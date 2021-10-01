@@ -10,17 +10,17 @@ CRoundButton::~CRoundButton() {
 }
 
 void CRoundButton::GetDefaulRect(CRect& rct) {
-    rct.left = -22;
-    rct.top = -22;
-    rct.right = 22;
-    rct.bottom = 22;
+    rct.left = -25;
+    rct.top = -25;
+    rct.right = 25;
+    rct.bottom = 25;
 }
 
 void CRoundButton::DrawRoundShape(PainColor painColor) {
     CDC* pDc = this->GetDC();
     //存储设备当前环境
     switch (painColor)
-    {
+    {//DEFAULT is ok
     case DEFAULT:
         //选择按钮默认状态下的画刷
         pDc->SelectObject(&m_normalBrush);

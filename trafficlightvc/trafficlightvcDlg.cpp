@@ -8,6 +8,7 @@
 #include "trafficlightvcDlg.h"
 #include "afxdialogex.h"
 #include "CSetLightTimesDlg.h"
+#include "CQuestDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -70,6 +71,7 @@ BEGIN_MESSAGE_MAP(CtrafficlightvcDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_START, &CtrafficlightvcDlg::OnBnClickedStart)
 	ON_BN_CLICKED(IDC_STOP, &CtrafficlightvcDlg::OnBnClickedStop)
 	ON_BN_CLICKED(IDC_SET, &CtrafficlightvcDlg::OnBnClickedSet)
+	ON_BN_CLICKED(IDC_QUESTASK, &CtrafficlightvcDlg::OnBnClickedQuestask)
 END_MESSAGE_MAP()
 
 
@@ -197,11 +199,13 @@ static void ThreadProc(void* argc) {
 			pDlg->SetColor(IDC_RED, RED, idx);//red
             Sleep(999);
         }
+		pDlg->SetColorDefault(IDC_RED);
 
         for (int idx = pDlg->GetGreenTimes(); idx >= 0 && !pDlg->stop_; idx--) {
 			pDlg->SetColor(IDC_GREEN, GREEN, idx);//green
             Sleep(999);
         }
+		pDlg->SetColorDefault(IDC_GREEN);
     }
 	pDlg->SetColorDefault(IDC_RED);
 	pDlg->SetColorDefault(IDC_GREEN);
@@ -236,4 +240,13 @@ void CtrafficlightvcDlg::OnBnClickedSet()
 
 		OnBnClickedStart();
 	}
+}
+
+void CtrafficlightvcDlg::OnBnClickedQuestask()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	CQuestDlg dlg(this);
+    if (IDOK == dlg.DoModal()) {
+		AfxMessageBox(m_askResult);
+    }
 }

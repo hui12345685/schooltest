@@ -39,6 +39,12 @@
     <ClInclude Include="CSetLightTimesDlg.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="CQuestDlg.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CQuestionBank.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="trafficlightvc.cpp">
@@ -54,6 +60,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="CSetLightTimesDlg.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CQuestDlg.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CQuestionBank.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

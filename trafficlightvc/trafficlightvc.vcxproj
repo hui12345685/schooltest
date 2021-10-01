@@ -183,6 +183,8 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CQuestDlg.h" />
+    <ClInclude Include="CQuestionBank.h" />
     <ClInclude Include="CRoundButton.h" />
     <ClInclude Include="CSetLightTimesDlg.h" />
     <ClInclude Include="framework.h" />
@@ -193,6 +195,8 @@
     <ClInclude Include="trafficlightvcDlg.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CQuestDlg.cpp" />
+    <ClCompile Include="CQuestionBank.cpp" />
     <ClCompile Include="CRoundButton.cpp" />
     <ClCompile Include="CSetLightTimesDlg.cpp" />
     <ClCompile Include="pch.cpp">
