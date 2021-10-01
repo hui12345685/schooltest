@@ -2,43 +2,60 @@
 #include "CRoundButton.h"
 
 CRoundButton::CRoundButton() {
-	m_Pen.CreatePen(PS_SOLID, 1, RGB(201, 201, 233));
-	m_normalBrush.CreateSolidBrush(RGB(231, 231, 231));
+	//m_normalBrush.CreateSolidBrush(RGB(231, 231, 231));
 }
 
 CRoundButton::~CRoundButton() {
-    m_Pen.DeleteObject();
     m_normalBrush.DeleteObject();
 }
 
-void CRoundButton::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
+void CRoundButton::GetDefaulRect(CRect& rct) {
+    rct.left = -22;
+    rct.top = -22;
+    rct.right = 22;
+    rct.bottom = 22;
+}
+
+void CRoundButton::DrawRoundShape(PainColor painColor) {
+    CDC* pDc = this->GetDC();
+    //存储设备当前环境
+    switch (painColor)
+    {
+    case DEFAULT:
+        //选择按钮默认状态下的画刷
+        pDc->SelectObject(&m_normalBrush);
+        break;
+    case RED:{
+        //选择按钮使用红色画刷
+        CBrush NewBrush((COLORREF)0x000FF0);
+        pDc->SelectObject(&NewBrush);
+        break;
+    }
+    case GREEN:{
+        //选择按钮使用绿色画刷
+        CBrush NewBrush((COLORREF)0x00FF00);
+        pDc->SelectObject(&NewBrush);
+        break;
+    }
+    default:
+        return;
+    }
+    
+    //获取按钮矩形区域
+    CRect conRect;
+    ::GetClientRect(this->m_hWnd, conRect);
+    //设置坐标偏移值
+    pDc->SetViewportOrg(conRect.right / 2, conRect.bottom / 2);
+    //画圆形按钮
+    CRect rct;
+    GetDefaulRect(rct);
+    pDc->Ellipse(rct);
+}
+
+void CRoundButton::DrawItem(LPDRAWITEMSTRUCT /*lpDrawItemStruct*/)
 {
 	// TODO:  添加您的代码以绘制指定项
-	CDC* pDc = this->GetDC();
-	//存储设备当前环境
-	int nSaveDc = pDc->SaveDC();
-	//选择按钮默认状态下的画刷
-	pDc->SelectObject(&m_normalBrush);
-	//选择画笔
-	pDc->SelectObject(&m_Pen);
-	
-	//获取按钮矩形区域
-	CRect conRect;
-	::GetClientRect(this->m_hWnd, conRect);
-	//设置坐标偏移值
-	pDc->SetViewportOrg(conRect.right / 2, conRect.bottom / 2);
-
-    //画圆形按钮
-	CRect rct;
-	rct.left = -22;
-	rct.top = -22;
-	rct.right = 22;
-	rct.bottom = 22;
-    pDc->Ellipse(rct);
-	//设置背景色
-	pDc->SetBkMode(TRANSPARENT);
-
-	pDc->RestoreDC(nSaveDc);
+    DrawRoundShape();
 }
 
 

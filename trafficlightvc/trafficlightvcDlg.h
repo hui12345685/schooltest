@@ -13,7 +13,25 @@ class CtrafficlightvcDlg : public CDialogEx
 public:
 	CtrafficlightvcDlg(CWnd* pParent = nullptr);	// 标准构造函数
 
-	void State(int xID, int color, int num);
+	void SetColor(int xID, PainColor painColor, int num);
+
+	void SetColorDefault(int xID);
+
+	void SetRedTimes(int redTimes) {
+		m_redTimes = redTimes;
+	}
+
+    void SetGreenTimes(int greenTimes) {
+		m_greenTimes = greenTimes;
+    }
+
+    int GetRedTimes() {
+        return m_redTimes;
+    }
+
+    int GetGreenTimes() {
+		return m_greenTimes;
+    }
 
 // 对话框数据
 #ifdef AFX_DESIGN_TIME
@@ -40,4 +58,10 @@ public:
 
 	bool stop_ = true ;
 	afx_msg void OnBnClickedStop();
+	afx_msg void OnBnClickedSet();
+
+protected:
+	//默认值30
+	int m_redTimes = 30;
+	int m_greenTimes = 30;
 };

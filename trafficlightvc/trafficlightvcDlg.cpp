@@ -7,6 +7,7 @@
 #include "trafficlightvc.h"
 #include "trafficlightvcDlg.h"
 #include "afxdialogex.h"
+#include "CSetLightTimesDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -68,6 +69,7 @@ BEGIN_MESSAGE_MAP(CtrafficlightvcDlg, CDialogEx)
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_START, &CtrafficlightvcDlg::OnBnClickedStart)
 	ON_BN_CLICKED(IDC_STOP, &CtrafficlightvcDlg::OnBnClickedStop)
+	ON_BN_CLICKED(IDC_SET, &CtrafficlightvcDlg::OnBnClickedSet)
 END_MESSAGE_MAP()
 
 
@@ -103,7 +105,7 @@ BOOL CtrafficlightvcDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO: 在此添加额外的初始化代码
-
+	
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -156,22 +158,24 @@ HCURSOR CtrafficlightvcDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
-void CtrafficlightvcDlg::State(int xID, int color, int num) {
-    CRect conRect;
+void CtrafficlightvcDlg::SetColor(int xID, PainColor painColor, int num) {
+    
     CWnd* pWnd = GetDlgItem(xID);//在图象控件中设圆形状态指示灯
     CDC* pDC = pWnd->GetDC();
+	CRect conRect;
     ::GetClientRect(pWnd->m_hWnd, conRect);
-    CBrush NewBrush((COLORREF)color);//指示灯为color色
+    CBrush NewBrush(painColor== RED ? (COLORREF)0x000FF0 : (COLORREF)0x00FF00);//指示灯为color色
     CBrush* pOldBrush = pDC->SelectObject(&NewBrush);
     pDC->SetViewportOrg(conRect.right / 2, conRect.bottom / 2);
     CRect rct;
-    rct.left = -22;
-    rct.top = -22;
-    rct.right = 22;
-    rct.bottom = 22;
+	CRoundButton::GetDefaulRect(rct);
     pDC->Ellipse(rct);
     pDC->SelectObject(pOldBrush);
 
+	/*CRoundButton* crBtn = (CRoundButton*)pWnd;
+	crBtn->DrawRoundShape(painColor);
+	CRect rct;
+	crBtn->GetDefaulRect(rct);*/
     CString strText;
 	if (0 != num){
 		strText.Format("%d", num);
@@ -180,19 +184,27 @@ void CtrafficlightvcDlg::State(int xID, int color, int num) {
     pWnd->ReleaseDC(pDC);
 }
 
+void CtrafficlightvcDlg::SetColorDefault(int xID) {
+	CWnd* pWnd = GetDlgItem(xID);//在图象控件中设圆形状态指示灯
+	CRoundButton* crBtn = (CRoundButton*)pWnd;
+	crBtn->DrawRoundShape(DEFAULT);
+}
+
 static void ThreadProc(void* argc) {
 	CtrafficlightvcDlg* pDlg = (CtrafficlightvcDlg*)argc;
     while (!pDlg->stop_) {
-        for (int idx = 30; idx >= 0; idx--) {
-			pDlg->State(IDC_RED, 0x000FF0, idx);//red
-            Sleep(1000);
+        for (int idx = pDlg->GetRedTimes(); idx >= 0 && !pDlg->stop_; idx--) {
+			pDlg->SetColor(IDC_RED, RED, idx);//red
+            Sleep(999);
         }
 
-        for (int idx = 30; idx >= 0; idx--) {
-			pDlg->State(IDC_GREEN, 0x00FF00, idx);//green
-            Sleep(1000);
+        for (int idx = pDlg->GetGreenTimes(); idx >= 0 && !pDlg->stop_; idx--) {
+			pDlg->SetColor(IDC_GREEN, GREEN, idx);//green
+            Sleep(999);
         }
     }
+	pDlg->SetColorDefault(IDC_RED);
+	pDlg->SetColorDefault(IDC_GREEN);
 }
 
 void CtrafficlightvcDlg::OnBnClickedStart()
@@ -211,4 +223,17 @@ void CtrafficlightvcDlg::OnBnClickedStop()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	stop_ = true;
+}
+
+
+void CtrafficlightvcDlg::OnBnClickedSet()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	CSetLightTimesDlg dlg(this);
+	if (IDOK == dlg.DoModal()) {
+		stop_ = true;
+		Sleep(1500);
+
+		OnBnClickedStart();
+	}
 }
