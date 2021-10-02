@@ -56,7 +56,6 @@ static CString GetSelectAsk(CButton& ask1, CButton& ask2) {
 void CQuestDlg::OnBnClickedOk()
 {
 	// TODO: 在此添加控件通知处理程序代码
-	
 	CString strSelAsk1 = GetSelectAsk(m_question1_ask1, m_question1_ask2);
 	CString strSelAsk2 = GetSelectAsk(m_question2_ask1, m_question2_ask2);
 	CString strSelAsk3 = GetSelectAsk(m_question3_ask1, m_question3_ask2);
@@ -74,23 +73,24 @@ void CQuestDlg::OnBnClickedOk()
 	else {
 		CString strAskRst;
         if (strSelAsk1 == m_question1Answer) {
-			strAskRst = strQuestion1 + " : 回答正确。\n";
+			strAskRst = strQuestion1 + "所选答案：" + strSelAsk1 + " : 回答正确。\n\n";
         }
         else {
-			strAskRst = strQuestion1 + " : 回答错误。\n";
+			strAskRst = strQuestion1 + "所选答案：" + strSelAsk1 + " : 回答错误。\n\n";
         }
         if (strSelAsk2 == m_question2Answer) {
-            strAskRst = selQuestion2 + " : 回答正确。\n";
+            strAskRst = strAskRst + selQuestion2 + "所选答案：" + strSelAsk2 + " : 回答正确。\n\n";
         }
         else {
-            strAskRst = selQuestion2 + " : 回答错误。\n";
+            strAskRst = strAskRst + selQuestion2 + "所选答案：" + strSelAsk2 +  " : 回答错误。\n\n";
         }
         if (strSelAsk3 == m_question3Answer) {
-            strAskRst = selQuestion3 + " : 回答正确。\n";
+            strAskRst = strAskRst + selQuestion3 + "所选答案：" + strSelAsk3 + " : 回答正确。\n\n";
         }
         else {
-            strAskRst = selQuestion3 + " : 回答错误。\n";
+            strAskRst = strAskRst + selQuestion3 + "所选答案：" + strSelAsk3 + " : 回答错误。\n\n";
         }
+		pDlg->SetAskResult(strAskRst);
 	}
 	
 	CDialogEx::OnOK();
